@@ -1,0 +1,354 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type FeedReceiptEntity {
+  id: Float!
+  feed: [FeedEntity!]!
+  ingredient: [IngredientEntity!]!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type IngredientEntity {
+  id: Float!
+  title: String!
+  feedReceipts: [FeedReceiptEntity!]!
+  ingredientQualities: [IngredientQualityEntity!]!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type ProviderEntity {
+  id: Float!
+  title: String!
+  ingredientQualities: [IngredientQualityEntity!]!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type IngredientQualityEntity {
+  id: Float!
+  ingredient: [IngredientEntity!]!
+  provider: [ProviderEntity!]!
+  feedSegment: [FeedSegmentEntity!]!
+  price: Float!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type FeedSegmentEntity {
+  id: Float!
+  title: String!
+  feed: [FeedEntity!]!
+  ingredientQualities: [IngredientQualityEntity!]!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type UkraineRegionEntity {
+  id: Float!
+  title: String!
+  marketDemands: [MarketDemandEntity!]!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type MarketDemandEntity {
+  id: Float!
+  production: [ProductionEntity!]!
+  ukraineRegion: [UkraineRegionEntity!]!
+  price: Float!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type MarketDemandForecast {
+  id: Float!
+  production: ProductionEntity!
+  ukraineRegion: UkraineRegionEntity!
+  price: Float!
+  deleted: Boolean!
+  createdAt: DateTime!
+  prediction: Float
+}
+
+type ProductionEntity {
+  id: Float!
+  feed: FeedEntity!
+  amount: Float!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type FeedTitleEntity {
+  id: Float!
+  title: String!
+  feed: [FeedEntity!]
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type FeedEntity {
+  id: Float!
+  animalSpecies: AnimalSpeciesEntity!
+  feedSegment: FeedSegmentEntity!
+  feedTitle: FeedTitleEntity!
+  feedReceipts: [FeedReceiptEntity!]!
+  productions: [ProductionEntity!]
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type AnimalSpeciesEntity {
+  id: Float!
+  title: String!
+  feed: [FeedEntity!]!
+  deleted: Boolean!
+  createdAt: DateTime!
+}
+
+type KeyValuePair {
+  year: Int!
+  month: Int!
+  week: Int
+  count: Int!
+}
+
+type RecordResponse {
+  records: [KeyValuePair!]!
+}
+
+type ObjectValue {
+  id: Int!
+  title: String!
+}
+
+type PredictionsResponse {
+  feedSegment: ObjectValue!
+  feedTitle: ObjectValue!
+  animalSpecies: ObjectValue!
+  ukraineRegion: ObjectValue!
+  prediction: Int!
+}
+
+type Query {
+  getAnimalSpecies(filter: GetAnimalSpeciesQuery, pagination: Pagination): [AnimalSpeciesEntity!]!
+  getFeed(filter: GetFeedQuery, pagination: Pagination): [FeedEntity!]!
+  getFeedTitles(filter: GetFeedTitleQuery, pagination: Pagination): [FeedTitleEntity!]!
+  getFeedSegments(filter: GetFeedSegmentQueryDto, pagination: Pagination): [FeedSegmentEntity!]!
+  getFeedReceipts(filter: GetFeedReceiptQueryFilter, pagination: Pagination): [FeedReceiptEntity!]!
+  getIngredients(filter: GetIngredientQueryDto, pagination: Pagination): [IngredientEntity!]!
+  getIngredientQuality(filter: GetIngredientQualityQueryDto, pagination: Pagination): [IngredientQualityEntity!]!
+  getProviders(filter: GetProviderQueryDto, pagination: Pagination): [ProviderEntity!]!
+  getMarketDemands(filter: GetMarketDemandDto, pagination: Pagination): [MarketDemandEntity!]!
+  getMarketDemandsForecastAmount(filter: GetMarketDemandDtoForecastAmount, pagination: Pagination): RecordResponse!
+  getMarketDemandsForecast(filter: GetMarketDemandDto, pagination: Pagination): [MarketDemandForecast!]!
+  getMarketDemand(filter: GetMarketDemandDto): MarketDemandEntity
+  getPredictions: [PredictionsResponse!]
+  getProductions(filter: GetProductionQueryDto, pagination: Pagination): [ProductionEntity!]!
+  getUkraineRegions(filter: GetUkraineRegionQueryDto, pagination: Pagination): [UkraineRegionEntity!]!
+}
+
+input GetAnimalSpeciesQuery {
+  id: Int
+  title: [String!]
+  feedId: Int
+  feedTitle: [String!]
+}
+
+input Pagination {
+  page: Int
+  pageSize: Int
+}
+
+input GetFeedQuery {
+  id: Int
+  animalSpeciesId: Int
+  animalSpeciesTitle: [String!]
+  feedSegmentId: Int
+  feedSegmentTitle: [String!]
+  feedTitle: [String!]
+}
+
+input GetFeedTitleQuery {
+  id: Int
+  title: [String!]
+}
+
+input GetFeedSegmentQueryDto {
+  id: Int
+  title: [String!]
+}
+
+input GetFeedReceiptQueryFilter {
+  id: Int
+  ingredientId: Int
+  ingredientTitle: [String!]
+  feedId: Int
+  feedTitle: [String!]
+  feedSegmentId: Int
+  feedSegmentTitle: [String!]
+  animalSpeciesId: Int
+  animalSpeciesTitle: [String!]
+}
+
+input GetIngredientQueryDto {
+  id: Int
+  title: [String!]
+}
+
+input GetIngredientQualityQueryDto {
+  id: Int
+  ingredientId: Int
+  ingredientTitle: [String!]
+  providerId: Int
+  providerTitle: [String!]
+  feedSegmentId: Int
+  feedSegmentTitle: [String!]
+}
+
+input GetProviderQueryDto {
+  id: Int
+  title: [String!]
+  createdAfter: Timestamp
+  createdBefore: Timestamp
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+input GetMarketDemandDto {
+  id: Int
+  createdAfter: Timestamp
+  createdBefore: Timestamp
+  ukraineRegionTitle: [String!]
+  productionId: Int
+  amountCreated: Int
+  productionCreatedBefore: Timestamp
+  productionCreatedAfter: Timestamp
+  feedId: Int
+  feedTitle: [String!]
+  animalSpeciesId: Int
+  animalSpeciesTitle: [String!]
+  feedSegmentId: Int
+  feedSegmentTitle: [String!]
+}
+
+input GetMarketDemandDtoForecastAmount {
+  id: Int
+  createdAfter: Timestamp
+  createdBefore: Timestamp
+  ukraineRegionTitle: [String!]
+  productionId: Int
+  amountCreated: Int
+  productionCreatedBefore: Timestamp
+  productionCreatedAfter: Timestamp
+  feedId: Int
+  feedTitle: [String!]
+  animalSpeciesId: Int
+  animalSpeciesTitle: [String!]
+  feedSegmentId: Int
+  feedSegmentTitle: [String!]
+  period: String!
+}
+
+input GetProductionQueryDto {
+  id: Int
+  createdAfter: Timestamp
+  createdBefore: Timestamp
+  feedId: Int
+  feedTitle: [String!]
+  animalSpeciesId: Int
+  animalSpeciesTitle: [String!]
+  feedSegmentId: Int
+  feedSegmentTitle: [String!]
+}
+
+input GetUkraineRegionQueryDto {
+  id: Int
+  title: [String!]
+}
+
+type Mutation {
+  createAnimalSpecies(body: CreateAnimalSpeciesMutationDto!): AnimalSpeciesEntity!
+  deleteAnimalSpecies(id: Boolean!): AnimalSpeciesEntity!
+  createFeed(body: CreateFeedMutationDto!): FeedEntity
+  deleteFeed(id: Boolean!): FeedEntity!
+  createFeedTitle(body: CreateFeedTitleMutationDto!): FeedTitleEntity!
+  deleteFeedTitle(id: Boolean!): FeedTitleEntity!
+  createFeedSegment(body: CreateFeedSegmentMutationDto!): FeedSegmentEntity!
+  deleteFeedSegment(id: Boolean!): FeedSegmentEntity!
+  createFeedReceipt(body: CreateFeedReceiptMutationDto!): FeedReceiptEntity!
+  deleteFeedReceipt(id: Boolean!): FeedReceiptEntity!
+  createIngredient(body: CreateIngredientMutationDto!): IngredientEntity!
+  deleteIngredient(id: Boolean!): IngredientEntity!
+  createIngredientQuality(body: CreateIngredientQualityMutationDto!): IngredientQualityEntity!
+  deleteIngredientQuality(id: Boolean!): IngredientQualityEntity!
+  createProvider(body: CreateProviderMutationDto!): ProviderEntity!
+  deleteProvider(id: Boolean!): ProviderEntity!
+  createMarketDemand(body: CreateMarketDemandMutationDto!): MarketDemandEntity!
+  createProduction(body: CreateProductionMutationDto!): ProductionEntity!
+  deleteProduction(id: Boolean!): ProductionEntity!
+  createUkraineRegion(body: CreateUkraineRegionMutationDto!): UkraineRegionEntity!
+  deleteUkraineRegion(id: Boolean!): UkraineRegionEntity!
+}
+
+input CreateAnimalSpeciesMutationDto {
+  title: String!
+}
+
+input CreateFeedMutationDto {
+  animalSpecies: Int!
+  feedSegment: Int!
+  feedTitle: Int!
+}
+
+input CreateFeedTitleMutationDto {
+  title: String!
+}
+
+input CreateFeedSegmentMutationDto {
+  title: String!
+}
+
+input CreateFeedReceiptMutationDto {
+  feed: Int!
+  ingredient: Int!
+}
+
+input CreateIngredientMutationDto {
+  title: String!
+}
+
+input CreateIngredientQualityMutationDto {
+  ingredient: Int!
+  provider: Int!
+  feedSegment: Int!
+  price: Int!
+}
+
+input CreateProviderMutationDto {
+  title: String!
+}
+
+input CreateMarketDemandMutationDto {
+  production: Int!
+  ukraineRegion: Int!
+  price: Int!
+}
+
+input CreateProductionMutationDto {
+  feed: Int!
+}
+
+input CreateUkraineRegionMutationDto {
+  title: String!
+}
